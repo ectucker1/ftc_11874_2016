@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.math.BotMath;
 @TeleOp(name="11874: TeleOp", group="11874")
 public class BotTeleOp extends OpMode{
 
-    private Bot bot;
+    protected Bot bot;
 
     /*
      * Code to run ONCE when the driver hits INIT
