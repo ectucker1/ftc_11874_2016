@@ -45,6 +45,9 @@ public class BotTeleOp extends OpMode{
     public void loop() {
         bot.getLeftMotor().setPower(BotMath.powerCurve(gamepad1.left_stick_y));
         bot.getRightMotor().setPower(BotMath.powerCurve(gamepad1.right_stick_y));
+
+        telemetry.addData("Right Motor", bot.getRightMotor().getPower());
+        telemetry.addData("Left Motor", bot .getLeftMotor().getPower());
     }
 
     /*

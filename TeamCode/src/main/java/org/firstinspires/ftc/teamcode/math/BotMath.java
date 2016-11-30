@@ -13,6 +13,9 @@ public class BotMath {
      * @return The curved value.
      */
     public static double powerCurve(double x) {
+        if(Math.abs(x) < 0.1) {
+            return 0;
+        }
         return (0.598958 * Math.pow(x, 3)) - (4.43184 * Math.pow(10, -16) * Math.pow(x, 2)) + (0.201042 * x);
     }
 
