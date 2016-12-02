@@ -15,6 +15,8 @@ public class Bot {
     private DcMotor leftMotor;
     private DcMotor rightMotor;
 
+    private DcMotor intake;
+
     private GyroSensor gyro;
 
     public Bot(HardwareMap map) {
@@ -22,6 +24,7 @@ public class Bot {
         this.leftMotor = map.dcMotor.get("motor_left");
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.rightMotor = map.dcMotor.get("motor_right");
+        this.intake = map.dcMotor.get("intake");
 
         this.gyro = map.gyroSensor.get("gyro");
     }
@@ -48,5 +51,13 @@ public class Bot {
 
     public void setGyro(GyroSensor gyro) {
         this.gyro = gyro;
+    }
+
+    public DcMotor getIntake() {
+        return intake;
+    }
+
+    public void setIntake(DcMotor intake) {
+        this.intake = intake;
     }
 }

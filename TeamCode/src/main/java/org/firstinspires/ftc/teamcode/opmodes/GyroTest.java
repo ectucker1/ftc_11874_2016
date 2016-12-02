@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.hardware.VuforiaField;
 
 /**
  * Created by Ethan Tucker on 11/26/2016.
  */
 @TeleOp(name="11874: Gyro Test", group="11874")
-public class GyroTest extends BotTeleOp {
+public class GyroTest extends BaseControlOp {
 
     @Override
     public void init() {
