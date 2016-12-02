@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.hardware.VuforiaField;
 /**
  * Created by Ethan Tucker on 11/26/2016.
  */
-@TeleOp(name="Vuforia Test", group="11874")
-public class VuforiaTest extends BotTeleOp {
+@TeleOp(name="11874: Vuforia Test", group="11874")
+public class VuforiaTest extends BaseControlOp {
 
     VuforiaField field;
 
