@@ -45,7 +45,7 @@ public class BaseControlOp extends OpMode{
         bot.getLeftMotor().setPower(BotMath.powerCurve(gamepad1.left_stick_y));
         bot.getRightMotor().setPower(BotMath.powerCurve(gamepad1.right_stick_y));
 
-        if(gamepad1.a) {
+        if(gamepad1.right_bumper) {
             bot.getIntake().setPower(0.75);
         }
 
