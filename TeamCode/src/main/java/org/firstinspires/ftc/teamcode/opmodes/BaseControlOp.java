@@ -46,7 +46,11 @@ public class BaseControlOp extends OpMode{
         bot.getRightMotor().setPower(BotMath.powerCurve(gamepad1.right_stick_y));
 
         if(gamepad1.right_bumper) {
-            bot.getIntake().setPower(0.75);
+            bot.getIntake().setPower(1);
+        } else if(gamepad1.left_bumper) {
+            bot.getIntake().setPower(-1);
+        } else {
+            bot.getIntake().setPower(0);
         }
 
         telemetry.addData("Right Motor", bot.getRightMotor().getPower());

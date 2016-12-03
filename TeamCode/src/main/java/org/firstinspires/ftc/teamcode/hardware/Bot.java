@@ -60,4 +60,15 @@ public class Bot {
     public void setIntake(DcMotor intake) {
         this.intake = intake;
     }
+
+    public void stopDrive() {
+        this.leftMotor.setPower(0);
+        this.rightMotor.setPower(0);
+    }
+
+    public void stopAll() {
+        this.leftMotor.setPower(0);
+        this.rightMotor.setPower(0);
+        this.intake.setPower(0);
+    }
 }

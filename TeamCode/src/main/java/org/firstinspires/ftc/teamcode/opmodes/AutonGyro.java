@@ -55,7 +55,7 @@ public class AutonGyro extends LinearOpMode {
             while (c.before(d))
             {
 
-                pidController.setTargetAngle(90);
+                pidController.setTargetAngle(0);
 
                 telemetry.addData("Starting Gyro:", pidController.getTarget());
                 telemetry.addData("Starting Gyro:", gyro.getDeviceName());

@@ -20,6 +20,14 @@ public class BotBlueAutonOp extends LinearOpMode {
         bot = new Bot(hardwareMap);
         field = new VuforiaField();
         waitForStart();
+
+        bot.getRightMotor().setPower(-0.75);
+        bot.getLeftMotor().setPower(-0.75);
+
+        Thread.sleep(2000);
+
+        bot.getRightMotor().setPower(0);
+        bot.getLeftMotor().setPower(0);
     }
 
 }
