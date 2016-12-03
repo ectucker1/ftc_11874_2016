@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 import org.firstinspires.ftc.teamcode.hardware.Bot;
 import org.firstinspires.ftc.teamcode.hardware.GyroPIDController;
 
+import java.util.Date;
+import java.util.Timer;
+
 /**
  * Created by STACK0V3RFL0W on 12/1/2016.
  */
@@ -43,26 +46,36 @@ public class AutonGyro extends LinearOpMode {
         //  pidController.calibrate();
         //   pidController.setTarget(0);
 
+        Date d = java.util.Calendar.getInstance().getTime();
+        d.setTime(15000);
+        while (opModeIsActive())
+        {
 
-        while (opModeIsActive()) {
-            pidController.setTargetAngle(0);
+            Date c = java.util.Calendar.getInstance().getTime();
+            while (c.before(d))
+            {
 
-            telemetry.addData("Starting Gyro:", pidController.getTarget());
-            telemetry.addData("Starting Gyro:", gyro.getDeviceName());
+                pidController.setTargetAngle(90);
 
-            telemetry.addData("leftPower", pidController.getLeftPower());
-            telemetry.addData("rightPower", pidController.getRightPower());
-            telemetry.addData("GyroHeading:", gyro.getHeading());
-            robot.getLeftMotor().setPower(pidController.getLeftPower());
-            robot.getRightMotor().setPower(pidController.getRightPower());
-            telemetry.addData("Gyro", gyro.getHeading());
-            telemetry.addData("Gyro", gyro.getHeading());
-            telemetry.addData("Accelerometer X:", CurrentX);
-            telemetry.addData("Accelerometer Y:", CurrentY);
-            telemetry.addData("Accelerometer Z:", CurrentZ);
+                telemetry.addData("Starting Gyro:", pidController.getTarget());
+                telemetry.addData("Starting Gyro:", gyro.getDeviceName());
 
-            loopCount++;
-            telemetry.addData("Cycles", loopCount);
+                telemetry.addData("leftPower", pidController.getLeftPower());
+                telemetry.addData("rightPower", pidController.getRightPower());
+                telemetry.addData("GyroHeading:", gyro.getHeading());
+                robot.getLeftMotor().setPower(pidController.getLeftPower());
+                robot.getRightMotor().setPower(pidController.getRightPower());
+                telemetry.addData("Gyro", gyro.getHeading());
+                telemetry.addData("Gyro", gyro.getHeading());
+                telemetry.addData("Accelerometer X:", CurrentX);
+                telemetry.addData("Accelerometer Y:", CurrentY);
+                telemetry.addData("Accelerometer Z:", CurrentZ);
+
+                loopCount++;
+                telemetry.addData("Cycles", loopCount);
+
+            }
         }
     }
 }
+
