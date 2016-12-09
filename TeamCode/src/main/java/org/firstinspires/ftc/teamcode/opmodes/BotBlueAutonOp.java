@@ -18,16 +18,30 @@ public class BotBlueAutonOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         bot = new Bot(hardwareMap);
-        field = new VuforiaField();
         waitForStart();
 
-        bot.getRightMotor().setPower(-0.75);
-        bot.getLeftMotor().setPower(-0.75);
+        //Turn right
+        bot.getLeftMotor().setPower(.50);
 
-        Thread.sleep(2000);
+        //Go forward
+        bot.getRightMotor().setPower(0.75);
+        bot.getLeftMotor().setPower(0.75);
 
+        Thread.sleep(5000);
+
+        //Turn right
+        bot.getLeftMotor().setPower(.50);
         bot.getRightMotor().setPower(0);
-        bot.getLeftMotor().setPower(0);
+
+        Thread.sleep(500);
+
+        //Go forward a bit more
+        bot.getLeftMotor().setPower(.75);
+        bot.getRightMotor().setPower(.75);
+
+        bot.stopAll();
+
+        //Figure out color
     }
 
 }

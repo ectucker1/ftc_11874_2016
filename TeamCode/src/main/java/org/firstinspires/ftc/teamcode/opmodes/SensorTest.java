@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /**
  * Created by Ethan Tucker on 11/26/2016.
  */
-@TeleOp(name="11874: Gyro Test", group="11874")
-public class GyroTest extends BaseControlOp {
+@TeleOp(name="11874: Sensor Test", group="11874")
+public class SensorTest extends BaseControlOp {
 
     @Override
     public void init() {
@@ -20,6 +20,9 @@ public class GyroTest extends BaseControlOp {
         telemetry.addData("Gyro X", bot.getGyro().rawX());
         telemetry.addData("Gyro Y", bot.getGyro().rawY());
         telemetry.addData("Gyro Z", bot.getGyro().rawZ());
+        telemetry.addData("Red", bot.getColor().red());
+        telemetry.addData("Blue", bot.getColor().blue());
+        telemetry.addData("Green", bot.getColor().green());
     }
 
 }

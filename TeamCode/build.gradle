@@ -21,6 +21,6 @@ repositories {
 
 dependencies {
     // Required for local unit tests (JUnit 4 framework)
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
+    //testCompile 'junit:junit:4.12'
+    //testCompile 'org.mockito:mockito-core:1.+'
 }

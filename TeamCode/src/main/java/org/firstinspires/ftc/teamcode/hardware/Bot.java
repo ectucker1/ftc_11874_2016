@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.*;
+import org.firstinspires.ftc.teamcode.hardware.nullware.NullDcMotor;
 
 /**
  * Created by Ethan Tucker on 10/25/2016.
@@ -17,16 +15,26 @@ public class Bot {
 
     private DcMotor intake;
 
+    private DcMotor slide;
+
+    private Servo pusher;
+
     private GyroSensor gyro;
+
+    private ColorSensor color;
 
     public Bot(HardwareMap map) {
         this.hardwareMap = map;
         this.leftMotor = map.dcMotor.get("motor_left");
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.rightMotor = map.dcMotor.get("motor_right");
-        this.intake = map.dcMotor.get("intake");
+        this.pusher = map.servo.get("pusher");
+        this.slide = map.dcMotor.get("slide");
+        //this.intake = map.dcMotor.get("intake");
+        this.intake = new NullDcMotor();
 
         this.gyro = map.gyroSensor.get("gyro");
+        this.color = map.colorSensor.get("color");
     }
 
     public DcMotor getLeftMotor() {
@@ -70,5 +78,21 @@ public class Bot {
         this.leftMotor.setPower(0);
         this.rightMotor.setPower(0);
         this.intake.setPower(0);
+    }
+
+    public ColorSensor getColor() {
+        return color;
+    }
+
+    public void setColor(ColorSensor color) {
+        this.color = color;
+    }
+
+    public Servo getPusher() {
+        return pusher;
+    }
+
+    public DcMotor getSlide() {
+        return slide;
     }
 }
