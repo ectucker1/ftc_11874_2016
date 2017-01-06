@@ -20,9 +20,9 @@ public class SensorTest extends BaseControlOp {
         telemetry.addData("Gyro X", bot.getGyro().rawX());
         telemetry.addData("Gyro Y", bot.getGyro().rawY());
         telemetry.addData("Gyro Z", bot.getGyro().rawZ());
-        telemetry.addData("Red", bot.getColor().red());
-        telemetry.addData("Blue", bot.getColor().blue());
-        telemetry.addData("Green", bot.getColor().green());
+        telemetry.addData("Red", bot.getBeaconSensor().red());
+        telemetry.addData("Blue", bot.getBeaconSensor().blue());
+        telemetry.addData("Green", bot.getBeaconSensor().green());
     }
 
 }

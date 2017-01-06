@@ -20,8 +20,9 @@ public class Bot {
     private Servo pusher;
 
     private GyroSensor gyro;
-
-    private ColorSensor color;
+    private OpticalDistanceSensor distance;
+    private ColorSensor beaconSensor;
+    private ColorSensor lineSensor;
 
     public Bot(HardwareMap map) {
         this.hardwareMap = map;
@@ -34,7 +35,9 @@ public class Bot {
         this.intake = new NullDcMotor();
 
         this.gyro = map.gyroSensor.get("gyro");
-        this.color = map.colorSensor.get("color");
+        this.beaconSensor = map.colorSensor.get("color");
+        this.lineSensor = map.colorSensor.get("line");
+        this.distance = map.opticalDistanceSensor.get("distance");
     }
 
     public DcMotor getLeftMotor() {
@@ -80,12 +83,12 @@ public class Bot {
         this.intake.setPower(0);
     }
 
-    public ColorSensor getColor() {
-        return color;
+    public ColorSensor getBeaconSensor() {
+        return beaconSensor;
     }
 
-    public void setColor(ColorSensor color) {
-        this.color = color;
+    public void setBeaconSensor(ColorSensor beaconSensor) {
+        this.beaconSensor = beaconSensor;
     }
 
     public Servo getPusher() {
@@ -94,5 +97,21 @@ public class Bot {
 
     public DcMotor getSlide() {
         return slide;
+    }
+
+    public OpticalDistanceSensor getDistance() {
+        return distance;
+    }
+
+    public void setDistance(OpticalDistanceSensor distance) {
+        this.distance = distance;
+    }
+
+    public ColorSensor getLineSensor() {
+        return lineSensor;
+    }
+
+    public void setLineSensor(ColorSensor lineSensor) {
+        this.lineSensor = lineSensor;
     }
 }

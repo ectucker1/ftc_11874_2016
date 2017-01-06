@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.hardware.Bot;
 import org.firstinspires.ftc.teamcode.math.BotMath;
 
@@ -11,6 +12,8 @@ import org.firstinspires.ftc.teamcode.math.BotMath;
 public class BaseControlOp extends OpMode{
 
     protected Bot bot;
+
+    protected double pusherPos = 0.5;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -46,23 +49,28 @@ public class BaseControlOp extends OpMode{
         bot.getRightMotor().setPower(BotMath.powerCurve(gamepad1.right_stick_y));
 
         if(gamepad1.right_bumper) {
-            bot.getSlide().setPower(1);
+            bot.getSlide().setPower(0.5);
         } else if(gamepad1.left_bumper) {
-            bot.getSlide().setPower(-1);
+            bot.getSlide().setPower(-0.5);
         } else {
             bot.getSlide().setPower(0);
         }
 
         if(gamepad1.a) {
-            bot.getPusher().setPosition(0.5);
+            pusherPos += 0.001;
+            //bot.getPusher().setPosition(pusherPos);
         } else if(gamepad1.x) {
-            bot.getPusher().setPosition(0.4);
+            //bot.getPusher().setPosition(0.0);
         } else if(gamepad1.b) {
-            bot.getPusher().setPosition(0.6);
+            pusherPos -= 0.001;
+            //bot.getPusher().setPosition(pusherPos);
         }
+        pusherPos = Range.clip(pusherPos, 0.0, 1.0);
+        bot.getPusher().setPosition(pusherPos);
 
         telemetry.addData("Right Motor", bot.getRightMotor().getPower());
         telemetry.addData("Left Motor", bot .getLeftMotor().getPower());
+        telemetry.addData("Pusher Posiion", bot.getPusher().getPosition());
     }
 
     /*
