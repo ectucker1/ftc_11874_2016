@@ -1,103 +1,75 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.hardware.Bot;
 
 /**
  * Created by Ethan Tucker on 1/5/2017.
  */
+@Autonomous(name="11874: Sensor Auton Red", group="Autonomous")
 public class SensorAutonomousRed extends LinearOpMode {
 
-    Bot bot;
-
-    double gyroOffset = 0;
+    private Bot bot;
 
     @Override
     public void runOpMode() throws InterruptedException {
         bot = new Bot(hardwareMap);
-        bot.getGyro().calibrate();
-        gyroOffset = -bot.getGyro().getHeading();
+        bot.setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        idle();
+        bot.calibrateGyro();
+        bot.setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
-        bot.getRightMotor().setPower(0.75);
-        bot.getLeftMotor().setPower(0.75);
-        Thread.sleep(500);
+        throwBalls();
 
-        turnGyro(90);
-
-        bot.getRightMotor().setPower(0.75);
-        bot.getLeftMotor().setPower(0.75);
-        Thread.sleep(5000);
-
-        turnGyro(0);
-
-        bot.getRightMotor().setPower(0.75);
-        bot.getLeftMotor().setPower(0.75);
+        bot.encoderDrive(2);
+        bot.turnGyro(90);
+        bot.encoderDrive(20);
+        bot.turnGyro(0);
+        bot.driveOn();
         while(!onLine());
-
-        turnGyro(90);
-
-        bot.getRightMotor().setPower(0.75);
-        bot.getLeftMotor().setPower(0.75);
+        bot.turnGyro(90);
+        bot.driveOn();
         //Greater than because light = less distance
-        while(bot.getDistance().getLightDetected() > 0.2);
+        while(bot.distance.getLightDetected() > 0.2);
         bot.stopDrive();
-
         hitBeacon();
-
-        bot.getRightMotor().setPower(-0.75);
-        bot.getLeftMotor().setPower(-0.75);
-        Thread.sleep(500);
-
-        turnGyro(0);
-
-        bot.getRightMotor().setPower(0.75);
-        bot.getLeftMotor().setPower(0.75);
+        bot.encoderDrive(-2);
+        bot.turnGyro(0);
+        bot.driveOn();
         while(!onLine());
-
-        turnGyro(90);
-
-        bot.getRightMotor().setPower(0.75);
-        bot.getLeftMotor().setPower(0.75);
+        bot.turnGyro(90);
+        bot.driveOn();
         //Greater than because light = less distance
-        while(bot.getDistance().getLightDetected() > 0.2);
+        while(bot.distance.getLightDetected() > 0.2);
         bot.stopDrive();
+        bot.encoderDrive(-2);
+        bot.turnGyro(315);
+        bot.encoderDrive(20);
 
-        bot.getRightMotor().setPower(-0.75);
-        bot.getLeftMotor().setPower(-0.75);
-        Thread.sleep(500);
-
-        turnGyro(315);
-
-        bot.getRightMotor().setPower(0.75);
-        bot.getLeftMotor().setPower(0.75);
-        Thread.sleep(5000);
-        
         bot.stopAll();
     }
 
-    private void turnGyro(int degrees) {
-        bot.getRightMotor().setPower(0.3);
-        bot.getLeftMotor().setPower(-0.3);
-        while(bot.getGyro().getHeading() + gyroOffset > 2);
-        bot.stopDrive();
-    }
-
     private boolean onLine() {
-        return (bot.getLineSensor().red() > 200
-            && bot.getLineSensor().blue() > 200
-            && bot.getLineSensor().green() > 200);
+        return (bot.lineSensor.red() > 200
+            && bot.lineSensor.blue() > 200
+            && bot.lineSensor.green() > 200);
     }
 
     private void hitBeacon() throws InterruptedException {
-        if(bot.getBeaconSensor().red() > bot.getBeaconSensor().blue()) {
-            bot.getPusher().setPosition(0.3);
+        if(bot.beaconSensor.red() > bot.beaconSensor.blue()) {
+            //TODO New beacon pusher
         } else {
-            bot.getPusher().setPosition(0.7);
+
         }
-        Thread.sleep(500);
-        bot.getPusher().setPosition(0.5);
+        bot.sleep(500);
+    }
+
+    private void throwBalls() {
+
     }
 
 }

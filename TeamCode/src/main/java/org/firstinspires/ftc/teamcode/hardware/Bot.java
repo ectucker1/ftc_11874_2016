@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.hardware.nullware.NullDcMotor;
 
@@ -8,68 +10,53 @@ import org.firstinspires.ftc.teamcode.hardware.nullware.NullDcMotor;
  */
 public class Bot {
 
-    private HardwareMap hardwareMap;
+    public static final double DRIVE_SPEED = 0.05;
+    public static final double TURN_SPEED = 0.01;
 
-    private DcMotor leftMotor;
-    private DcMotor rightMotor;
+    public static final double UNITS_ROTATION = 1440;
 
-    private DcMotor intake;
+    public static final int GYRO_THRESHOLD = 2;
 
-    private DcMotor slide;
+    private LinearOpMode mode;
+    private boolean linear = false;
 
-    private Servo pusher;
+    public HardwareMap hardwareMap;
 
-    private GyroSensor gyro;
-    private OpticalDistanceSensor distance;
-    private ColorSensor beaconSensor;
-    private ColorSensor lineSensor;
+    public DcMotor leftMotor;
+    public DcMotor rightMotor;
+
+    public GyroSensor gyro;
+    public OpticalDistanceSensor distance;
+    public ColorSensor beaconSensor;
+    public ColorSensor lineSensor;
+
+    private double gyroOffset;
+
+    public Bot(LinearOpMode mode) {
+        this(mode.hardwareMap);
+        this.mode = mode;
+        linear = true;
+    }
 
     public Bot(HardwareMap map) {
         this.hardwareMap = map;
-        this.leftMotor = map.dcMotor.get("motor_left");
-        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.rightMotor = map.dcMotor.get("motor_right");
-        this.pusher = map.servo.get("pusher");
-        this.slide = map.dcMotor.get("slide");
-        //this.intake = map.dcMotor.get("intake");
-        this.intake = new NullDcMotor();
+        this.leftMotor = hardwareMap.dcMotor.get("motor_left");
+        leftMotor.setDirection(DcMotor.Direction.FORWARD);
+        this.rightMotor = hardwareMap.dcMotor.get("motor_right");
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        this.gyro = map.gyroSensor.get("gyro");
-        this.beaconSensor = map.colorSensor.get("color");
-        this.lineSensor = map.colorSensor.get("line");
-        this.distance = map.opticalDistanceSensor.get("distance");
+        this.gyro = hardwareMap.gyroSensor.get("gyro");
+        //this.beaconSensor = map.colorSensor.get("color");
+        //this.lineSensor = map.colorSensor.get("line");
+        //this.distance = map.opticalDistanceSensor.get("distance");
+
+        setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public DcMotor getLeftMotor() {
-        return leftMotor;
-    }
-
-    public void setLeftMotor(DcMotor leftMotor) {
-        this.leftMotor = leftMotor;
-    }
-
-    public DcMotor getRightMotor() {
-        return rightMotor;
-    }
-
-    public void setRightMotor(DcMotor rightMotor) {
-        this.rightMotor = rightMotor;
-    }
-
-    public GyroSensor getGyro() {
-        return gyro;
-    }
-
-    public void setGyro(GyroSensor gyro) {
-        this.gyro = gyro;
-    }
-
-    public DcMotor getIntake() {
-        return intake;
-    }
-
-    public void setIntake(DcMotor intake) {
-        this.intake = intake;
+    public void calibrateGyro() throws InterruptedException {
+        gyro.calibrate();
+        Thread.sleep(5000);
+        gyroOffset = -gyro.getHeading();
     }
 
     public void stopDrive() {
@@ -80,38 +67,70 @@ public class Bot {
     public void stopAll() {
         this.leftMotor.setPower(0);
         this.rightMotor.setPower(0);
-        this.intake.setPower(0);
+        //TODO More motors
     }
 
-    public ColorSensor getBeaconSensor() {
-        return beaconSensor;
+    public void setDriveMode(DcMotor.RunMode mode) {
+        leftMotor.setMode(mode);
+        rightMotor.setMode(mode);
     }
 
-    public void setBeaconSensor(ColorSensor beaconSensor) {
-        this.beaconSensor = beaconSensor;
+    public void driveOn() {
+        leftMotor.setPower(DRIVE_SPEED);
+        rightMotor.setPower(DRIVE_SPEED);
     }
 
-    public Servo getPusher() {
-        return pusher;
+    public void encoderDrive(double leftRotations, double rightRotations) {
+        if(linear) {
+            // Determine new target position, and pass to motor controller
+            int newLeftTarget = leftMotor.getCurrentPosition() - (int) (leftRotations * UNITS_ROTATION);
+            int newRightTarget = rightMotor.getCurrentPosition() - (int) (rightRotations * UNITS_ROTATION);
+            leftMotor.setTargetPosition(newLeftTarget);
+            rightMotor.setTargetPosition(newRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            setDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            leftMotor.setPower(Math.abs(DRIVE_SPEED));
+            rightMotor.setPower(Math.abs(DRIVE_SPEED));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            while ((leftMotor.isBusy() && rightMotor.isBusy()) && mode.opModeIsActive()) {
+                mode.telemetry.addData("Right encoder", rightMotor.getCurrentPosition());
+                mode.telemetry.addData("Right target", rightMotor.getTargetPosition());
+                mode.updateTelemetry(mode.telemetry);
+            }
+
+            // Stop all motion;
+            stopDrive();
+
+            // Turn off RUN_TO_POSITION
+            setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        } else {
+            throw new IllegalStateException("Encoder driving can only be used when constructed from LinearOpMode.");
+        }
     }
 
-    public DcMotor getSlide() {
-        return slide;
+    public void encoderDrive(double rotations) {
+        encoderDrive(rotations, rotations);
     }
 
-    public OpticalDistanceSensor getDistance() {
-        return distance;
+    public void turnGyro(int rotation) {
+        int startHeading = gyro.getHeading();
+        if(linear) {
+            rightMotor.setPower(TURN_SPEED);
+            leftMotor.setPower(-TURN_SPEED);
+            while (Math.abs(gyro.getHeading() - startHeading - rotation) > GYRO_THRESHOLD
+                    && mode.opModeIsActive()) ;
+            stopDrive();
+        } else {
+            throw new IllegalStateException("Gyro turning can only be used when constructed from LinearOpMode.");
+        }
     }
 
-    public void setDistance(OpticalDistanceSensor distance) {
-        this.distance = distance;
+    public void sleep(long millis) throws InterruptedException {
+        Thread.sleep(millis);
     }
 
-    public ColorSensor getLineSensor() {
-        return lineSensor;
-    }
-
-    public void setLineSensor(ColorSensor lineSensor) {
-        this.lineSensor = lineSensor;
-    }
 }

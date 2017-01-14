@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.hardware.VuforiaField;
 /**
  * Created by Ethan Tucker on 11/3/2016.
  */
-@Autonomous(name="11874: RedAutonomous", group="11874")
+@Autonomous(name="11874: Straight Autonomous", group="11874")
 public class BotStraightAutonOp extends LinearOpMode {
 
     Bot bot;
@@ -18,13 +18,7 @@ public class BotStraightAutonOp extends LinearOpMode {
         bot = new Bot(hardwareMap);
         waitForStart();
 
-        bot.getRightMotor().setPower(-0.78);
-        bot.getLeftMotor().setPower(-0.75);
-
-        Thread.sleep(2000);
-
-        bot.getRightMotor().setPower(0);
-        bot.getLeftMotor().setPower(0);
+        bot.encoderDrive(20);
     }
 
 }

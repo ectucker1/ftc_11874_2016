@@ -16,13 +16,13 @@ public class SensorTest extends BaseControlOp {
     @Override
     public void loop() {
         super.loop();
-        telemetry.addData("Gyro Rotation Fraction", bot.getGyro().getRotationFraction());
-        telemetry.addData("Gyro X", bot.getGyro().rawX());
-        telemetry.addData("Gyro Y", bot.getGyro().rawY());
-        telemetry.addData("Gyro Z", bot.getGyro().rawZ());
-        telemetry.addData("Red", bot.getBeaconSensor().red());
-        telemetry.addData("Blue", bot.getBeaconSensor().blue());
-        telemetry.addData("Green", bot.getBeaconSensor().green());
+        telemetry.addData("Gyro Heading", bot.gyro.getHeading());
+        telemetry.addData("Gyro X", bot.gyro.rawX());
+        telemetry.addData("Gyro Y", bot.gyro.rawY());
+        telemetry.addData("Gyro Z", bot.gyro.rawZ());
+        //telemetry.addData("Red", bot.beaconSensor.red());
+        //telemetry.addData("Blue", bot.beaconSensor.blue());
+        //telemetry.addData("Green", bot.beaconSensor.green());
     }
 
 }
