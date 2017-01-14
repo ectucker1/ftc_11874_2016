@@ -40,25 +40,24 @@ public class AutonGyro extends LinearOpMode {
         }
 
         if (gyro == null) {
-            // gyro = new NullGyro();
+            telemetry.addData("Gyro failed to load check hardware map", gyro.toString());
+
         }
         GyroPIDController pidController = new GyroPIDController(gyro);
+
         pidController.initialize();
         //  pidController.setDirection(DcMotor.Direction.REVERSE);
         //  pidController.calibrate();
         //   pidController.setTarget(0);
 
-        Date d = java.util.Calendar.getInstance().getTime();
-        d.setTime(15000);
+        long target = System.currentTimeMillis() + 2000;
+
         while (opModeIsActive())
         {
-
-            Date c = java.util.Calendar.getInstance().getTime();
-            while (c.before(d))
+            while (System.currentTimeMillis()<target)
             {
-
-                pidController.setTargetAngle(0);
-
+                pidController.setTargetAngle(90);
+                pidController.calculateMotorPowers();
                 telemetry.addData("Starting Gyro:", pidController.getTarget());
                 telemetry.addData("Starting Gyro:", gyro.getDeviceName());
 
