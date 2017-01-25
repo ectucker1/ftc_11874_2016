@@ -4,13 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.hardware.Bot;
-import org.firstinspires.ftc.teamcode.hardware.VuforiaField;
 
 /**
- * Created by Ethan Tucker on 11/3/2016.
+ * Created by Ethan Tucker on 1/21/2017.
  */
-@Autonomous(name="11874: Straight Autonomous", group="11874")
-public class BotStraightAutonOp extends LinearOpMode {
+@Autonomous(name="11874: Fire Autonomous", group="11874")
+public class BotFireAutonOp extends LinearOpMode {
 
     Bot bot;
 
@@ -27,12 +26,6 @@ public class BotStraightAutonOp extends LinearOpMode {
         bot.encoderDrive(0.1);
         bot.thrower.setPosition(1.0);
         bot.sleep(500);
-
-        bot.turnGyro(13);
-        bot.encoderDrive(0.9);
-
-        bot.sleep(500);
-        bot.encoderDrive(0.1);
     }
 
 }

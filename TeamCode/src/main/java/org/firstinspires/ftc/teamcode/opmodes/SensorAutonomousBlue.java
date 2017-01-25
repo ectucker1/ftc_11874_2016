@@ -8,68 +8,69 @@ import org.firstinspires.ftc.teamcode.hardware.Bot;
 /**
  * Created by Ethan Tucker on 1/5/2017.
  */
-@Autonomous(name="11874: Sensor Auton Red", group="Autonomous")
-public class SensorAutonomousRed extends LinearOpMode {
+@Autonomous(name="11874: Sensor Auton Blue", group="Autonomous")
+public class SensorAutonomousBlue extends LinearOpMode {
 
     private Bot bot;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bot = new Bot(hardwareMap);
+        bot = new Bot(this);
         bot.setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
-        bot.calibrateGyro();
+        //bot.calibrateGyro();
         bot.setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
         throwBalls();
+        bot.sleep(500);
 
+        bot.encoderDrive(0.9);
+        bot.turnGyro(-90);
+        bot.encoderDrive(1.2);
+        bot.turnGyro(90);
+        //bot.driveOn();
+        //while(!onLine() && opModeIsActive());
+        //bot.turnGyro(90);
+        //bot.driveOn();
+        //Greater than because light = less distance
+        //bot.encoderDrive(-0.1);
+        //bot.stopDrive();
+        /*hitBeacon();
+        bot.encoderDrive(-2);
+        bot.turnGyro(0);
+        bot.driveOn();
+        while(!onLine() && opModeIsActive());
+        bot.turnGyro(90);
+        bot.driveOn();
+        //Greater than because light = less distance
+        while(bot.distance.getLightDetected() > 0.2 && opModeIsActive());
+        bot.stopDrive();
         bot.encoderDrive(2);
-        bot.turnGyro(90);
-        bot.encoderDrive(20);
-        bot.turnGyro(0);
-        bot.driveOn();
-        while(!onLine());
-        bot.turnGyro(90);
-        bot.driveOn();
-        //Greater than because light = less distance
-        while(bot.distance.getLightDetected() > 0.2);
-        bot.stopDrive();
-        hitBeacon();
-        bot.encoderDrive(-2);
-        bot.turnGyro(0);
-        bot.driveOn();
-        while(!onLine());
-        bot.turnGyro(90);
-        bot.driveOn();
-        //Greater than because light = less distance
-        while(bot.distance.getLightDetected() > 0.2);
-        bot.stopDrive();
-        bot.encoderDrive(-2);
         bot.turnGyro(315);
-        bot.encoderDrive(20);
+        bot.encoderDrive(-20);
 
-        bot.stopAll();
+        bot.stopAll();*/
     }
 
     private boolean onLine() {
-        return (bot.lineSensor.red() > 200
-            && bot.lineSensor.blue() > 200
-            && bot.lineSensor.green() > 200);
+        return bot.lineSensor.getLightDetected() > 0.7;
     }
 
     private void hitBeacon() throws InterruptedException {
         if(bot.beaconSensor.red() > bot.beaconSensor.blue()) {
-            //TODO New beacon pusher
+            bot.pusherLeft.setPosition(1.0);
         } else {
-
+            bot.pusherRight.setPosition(1.0);
         }
         bot.sleep(500);
+        bot.pusherLeft.setPosition(0.0);
+        bot.pusherRight.setPosition(0.0);
     }
 
     private void throwBalls() {
-
+        bot.thrower.setPosition(0.0);
     }
 
 }

@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.hardware.nullware.NullDcMotor;
  */
 public class Bot {
 
-    public static final double DRIVE_SPEED = 0.05;
-    public static final double TURN_SPEED = 0.01;
+    public static final double DRIVE_SPEED = 0.3;
+    public static final double TURN_SPEED = 0.05;
 
     public static final double UNITS_ROTATION = 1440;
 
@@ -25,10 +25,17 @@ public class Bot {
     public DcMotor leftMotor;
     public DcMotor rightMotor;
 
+    public DcMotor slide;
+
     public GyroSensor gyro;
     public OpticalDistanceSensor distance;
     public ColorSensor beaconSensor;
-    public ColorSensor lineSensor;
+    public OpticalDistanceSensor lineSensor;
+
+    public Servo thrower;
+
+    public Servo pusherLeft;
+    public Servo pusherRight;
 
     private double gyroOffset;
 
@@ -45,18 +52,32 @@ public class Bot {
         this.rightMotor = hardwareMap.dcMotor.get("motor_right");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
 
+        //this.slide = hardwareMap.dcMotor.get("slide");
+
         this.gyro = hardwareMap.gyroSensor.get("gyro");
-        //this.beaconSensor = map.colorSensor.get("color");
-        //this.lineSensor = map.colorSensor.get("line");
+        this.beaconSensor = map.colorSensor.get("color");
+        this.lineSensor = map.opticalDistanceSensor.get("line");
         //this.distance = map.opticalDistanceSensor.get("distance");
 
+        this.thrower = hardwareMap.servo.get("thrower");
+        thrower.setPosition(0.0);
+
+        this.pusherLeft = hardwareMap.servo.get("pusher_right");
+        this.pusherRight = hardwareMap.servo.get("pusher_left");
+        resetServos();
+
         setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        calibrateGyro();
     }
 
-    public void calibrateGyro() throws InterruptedException {
-        gyro.calibrate();
-        Thread.sleep(5000);
+    public void calibrateGyro() {
         gyroOffset = -gyro.getHeading();
+    }
+
+    public void resetServos() {
+        pusherRight.setPosition(0.5);
+        pusherLeft.setPosition(0.75);
     }
 
     public void stopDrive() {
@@ -117,12 +138,55 @@ public class Bot {
     }
 
     public void turnGyro(int rotation) {
-        int startHeading = gyro.getHeading();
+        int target = gyro.getHeading() + rotation;
+        while(target > 360) {
+            target -= 360;
+        }
+        while(target < 0) {
+            target += 360;
+        }
         if(linear) {
-            rightMotor.setPower(TURN_SPEED);
-            leftMotor.setPower(-TURN_SPEED);
-            while (Math.abs(gyro.getHeading() - startHeading - rotation) > GYRO_THRESHOLD
-                    && mode.opModeIsActive()) ;
+            if(rotation > 0) {
+                rightMotor.setPower(TURN_SPEED);
+                leftMotor.setPower(-TURN_SPEED);
+            } else {
+                rightMotor.setPower(-TURN_SPEED);
+                leftMotor.setPower(TURN_SPEED);
+            }
+            while (Math.abs(gyro.getHeading() - target) > GYRO_THRESHOLD
+                    && mode.opModeIsActive()) {
+                mode.telemetry.addData("Gyro Heading", gyro.getHeading());
+                mode.telemetry.addData("Gyro Target", target);
+                mode.updateTelemetry(mode.telemetry);
+            }
+            stopDrive();
+        } else {
+            throw new IllegalStateException("Gyro turning can only be used when constructed from LinearOpMode.");
+        }
+    }
+
+    public void turnGyroTo(int rotation) {
+        double target = gyroOffset + rotation;
+        while(target > 360) {
+            target -= 360;
+        }
+        while(target < 0) {
+            target += 360;
+        }
+        if(linear) {
+            if(rotation > 0) {
+                rightMotor.setPower(TURN_SPEED);
+                leftMotor.setPower(-TURN_SPEED);
+            } else {
+                rightMotor.setPower(-TURN_SPEED);
+                leftMotor.setPower(TURN_SPEED);
+            }
+            while (Math.abs(gyro.getHeading() - target) > GYRO_THRESHOLD
+                    && mode.opModeIsActive()) {
+                mode.telemetry.addData("Gyro Heading", gyro.getHeading());
+                mode.telemetry.addData("Gyro Target", target);
+                mode.updateTelemetry(mode.telemetry);
+            }
             stopDrive();
         } else {
             throw new IllegalStateException("Gyro turning can only be used when constructed from LinearOpMode.");
