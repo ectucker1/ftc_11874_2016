@@ -6,17 +6,11 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.GyroSensor;
 
-
-
-import com.qualcomm.robotcore.hardware.GyroSensor;
-
 /**
  * Created by STACK0V3RFL0W on 2/20/2016.
- *
+ * <p>
  * For an example of class usage see the unit tests
- *  ---    testUsageExample()  in GyroPIDControllerTest in androidTest folder
- *
- *
+ * ---    testUsageExample()  in GyroPIDControllerTest in androidTest folder
  */
 public class GyroPIDController {
     public GyroSensor gyro = null;

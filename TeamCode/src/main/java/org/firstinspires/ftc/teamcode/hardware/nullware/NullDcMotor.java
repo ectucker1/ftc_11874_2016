@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.hardware.nullware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 /**
  * A null object form of {@link DcMotor}

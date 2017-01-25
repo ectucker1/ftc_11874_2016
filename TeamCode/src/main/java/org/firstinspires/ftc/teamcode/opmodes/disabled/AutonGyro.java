@@ -1,22 +1,16 @@
-package org.firstinspires.ftc.teamcode.opmodes;
-
-import android.hardware.SensorManager;
+package org.firstinspires.ftc.teamcode.opmodes.disabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.GyroSensor;
-
-import org.firstinspires.ftc.teamcode.hardware.Bot;
 import org.firstinspires.ftc.teamcode.hardware.GyroPIDController;
-
-import java.util.Date;
-import java.util.Timer;
+import org.firstinspires.ftc.teamcode.math.AdvancedBot;
 
 /**
  * Created by STACK0V3RFL0W on 12/1/2016.
  */
-@Autonomous(name="11874: Chris's Strange Gyro Code", group="11874")
+@Autonomous(name = "11874: Chris's Strange Gyro Code", group = "11874")
 @Disabled
 public class AutonGyro extends LinearOpMode {
 
@@ -30,7 +24,7 @@ public class AutonGyro extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Bot robot = new Bot(hardwareMap);
+        AdvancedBot robot = new AdvancedBot(this);
         GyroSensor gyro = null;
 
         try {
@@ -52,10 +46,8 @@ public class AutonGyro extends LinearOpMode {
 
         long target = System.currentTimeMillis() + 2000;
 
-        while (opModeIsActive())
-        {
-            while (System.currentTimeMillis()<target)
-            {
+        while (opModeIsActive()) {
+            while (System.currentTimeMillis() < target) {
                 pidController.setTargetAngle(90);
                 pidController.calculateMotorPowers();
                 telemetry.addData("Starting Gyro:", pidController.getTarget());

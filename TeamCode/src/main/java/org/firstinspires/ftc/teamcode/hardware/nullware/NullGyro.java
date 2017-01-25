@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.hardware.nullware;
 
 import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 /**
  * Created by STACK0V3RFL0W on 2/17/2016.
  */
-public class NullGyro implements GyroSensor
-{
+public class NullGyro implements GyroSensor {
     int _heading = 0;
 
     @Override
