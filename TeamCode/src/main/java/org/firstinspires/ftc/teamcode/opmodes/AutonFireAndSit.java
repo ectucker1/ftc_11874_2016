@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.math.AdvancedBot;
 /**
  * Created by Ethan Tucker on 1/21/2017.
  */
-@Autonomous(name = "11874: Fire Autonomous", group = "11874")
-public class BotFireAutonOp extends LinearOpMode {
+@Autonomous(name = "11874: Fire Autonomous Do not Move", group = "11874")
+public class AutonFireAndSit extends LinearOpMode {
 
     AdvancedBot bot;
 
@@ -23,7 +23,7 @@ public class BotFireAutonOp extends LinearOpMode {
 
         waitForStart();
 
-        bot.encoderDrive(0.1);
+
         bot.thrower.setPosition(0.0);
         bot.sleep(500);
     }
