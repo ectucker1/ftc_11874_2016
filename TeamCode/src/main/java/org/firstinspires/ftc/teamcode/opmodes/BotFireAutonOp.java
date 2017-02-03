@@ -24,7 +24,7 @@ public class BotFireAutonOp extends LinearOpMode {
         waitForStart();
 
         bot.encoderDrive(0.1);
-        bot.thrower.setPosition(1.0);
+        bot.thrower.setPosition(0.0);
         bot.sleep(500);
     }
 

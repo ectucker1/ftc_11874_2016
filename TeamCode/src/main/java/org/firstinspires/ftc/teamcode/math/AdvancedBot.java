@@ -41,9 +41,9 @@ public class AdvancedBot extends HardwareBot {
     }
 
     public void resetServos() {
-        pusherRight.setPosition(0.5);
-        pusherLeft.setPosition(0.75);
-        thrower.setPosition(0.0);
+        pusherRight.setPosition(1.0);
+        pusherLeft.setPosition(1.0);
+        thrower.setPosition(0.8);
     }
 
     public void encoderDrive(double rotations) {
