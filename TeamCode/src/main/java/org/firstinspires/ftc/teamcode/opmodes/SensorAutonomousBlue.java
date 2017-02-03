@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.math.AdvancedBot;
+import org.firstinspires.ftc.teamcode.math.AutonUtil;
 
 /**
  * Created by Ethan Tucker on 1/5/2017.
@@ -23,7 +24,7 @@ public class SensorAutonomousBlue extends LinearOpMode {
 
         waitForStart();
 
-        throwBalls();
+        AutonUtil.throwBalls(bot);
         bot.sleep(500);
 
         bot.encoderDrive(0.9);
@@ -53,24 +54,4 @@ public class SensorAutonomousBlue extends LinearOpMode {
 
         bot.stopAll();*/
     }
-
-    private boolean onLine() {
-        return bot.lineSensor.getLightDetected() > 0.7;
-    }
-
-    private void hitBeacon() throws InterruptedException {
-        if (bot.beaconSensor.red() > bot.beaconSensor.blue()) {
-            bot.pusherLeft.setPosition(1.0);
-        } else {
-            bot.pusherRight.setPosition(1.0);
-        }
-        bot.sleep(500);
-        bot.pusherLeft.setPosition(0.0);
-        bot.pusherRight.setPosition(0.0);
-    }
-
-    private void throwBalls() {
-        bot.thrower.setPosition(0.0);
-    }
-
 }

@@ -49,6 +49,11 @@ public class BaseControlOp extends LinearOpMode {
 
             telemetry.addData("Right Motor", bot.rightMotor.getPower());
             telemetry.addData("Left Motor", bot.leftMotor.getPower());
+            telemetry.addData("Beacon Red", bot.beaconSensor.red());
+            telemetry.addData("Beacon Blue", bot.beaconSensor.blue());
+            telemetry.addData("Beacon Green", bot.beaconSensor.green());
+            telemetry.addData("Line Light", bot.lineSensor.getRawLightDetected());
+            telemetry.addData("Gyro Heading", bot.gyroHeading());
             telemetry.update();
         }
     }
