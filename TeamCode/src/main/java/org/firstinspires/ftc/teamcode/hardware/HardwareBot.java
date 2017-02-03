@@ -34,9 +34,9 @@ public class HardwareBot {
 
         this.hardwareMap = mode.hardwareMap;
         this.leftMotor = hardwareMap.dcMotor.get("motor_left");
-        leftMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
         this.rightMotor = hardwareMap.dcMotor.get("motor_right");
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         //this.slide = hardwareMap.dcMotor.get("slide");
 

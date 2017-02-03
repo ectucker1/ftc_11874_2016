@@ -15,6 +15,12 @@ public class AdvancedBot extends HardwareBot {
     public static final double UNITS_ROTATION = 1440;
 
     public static final int GYRO_THRESHOLD = 2;
+    public static final double LINE_THRESHOLD = 0.4;
+
+    public static final double PUSHER_LEFT_INIT = 1.0;
+    public static final double PUSHER_RIGHT_INIT = 1.0;
+    public static final double PUSHER_LEFT_FORWARD = 0.0;
+    public static final double PUSHER_RIGHT_FORWARD = 0.0;
 
     public AdvancedBot(LinearOpMode mode) {
         super(mode);
@@ -41,8 +47,8 @@ public class AdvancedBot extends HardwareBot {
     }
 
     public void resetServos() {
-        pusherRight.setPosition(1.0);
-        pusherLeft.setPosition(1.0);
+        pusherRight.setPosition(PUSHER_RIGHT_INIT);
+        pusherLeft.setPosition(PUSHER_LEFT_INIT);
         thrower.setPosition(0.8);
     }
 
