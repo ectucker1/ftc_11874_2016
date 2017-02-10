@@ -24,7 +24,7 @@ public class SensorAutonomousBlue extends LinearOpMode {
 
         waitForStart();
 
-        AutonUtil.throwBalls(bot);
+        bot.launchBalls();
         bot.sleep(500);
 
         bot.encoderDrive(0.9);

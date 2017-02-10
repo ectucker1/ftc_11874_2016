@@ -24,7 +24,7 @@ public class BotStraightAutonOp extends LinearOpMode {
         waitForStart();
 
         bot.encoderDrive(0.1);
-        bot.thrower.setPosition(0.0);
+        bot.launchBalls();
         bot.sleep(500);
 
         bot.turnGyro(13);

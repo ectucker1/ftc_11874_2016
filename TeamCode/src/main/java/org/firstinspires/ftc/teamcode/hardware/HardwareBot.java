@@ -16,13 +16,12 @@ public class HardwareBot {
     public DcMotor rightMotor;
 
     public DcMotor slide;
+    public DcMotor launcher;
 
     public GyroSensor gyro;
     public OpticalDistanceSensor distance;
     public ColorSensor beaconSensor;
     public OpticalDistanceSensor lineSensor;
-
-    public Servo thrower;
 
     public Servo pusherLeft;
     public Servo pusherRight;
@@ -38,17 +37,16 @@ public class HardwareBot {
         this.rightMotor = hardwareMap.dcMotor.get("motor_right");
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
 
-        //this.slide = hardwareMap.dcMotor.get("slide");
+        this.slide = hardwareMap.dcMotor.get("slide");
+        this.launcher = hardwareMap.dcMotor.get("launcer");
+
+        this.pusherLeft = hardwareMap.servo.get("pusher_right");
+        this.pusherRight = hardwareMap.servo.get("pusher_left");
 
         this.gyro = hardwareMap.gyroSensor.get("gyro");
         this.beaconSensor = hardwareMap.colorSensor.get("color");
         this.lineSensor = hardwareMap.opticalDistanceSensor.get("line");
-        //this.distance = map.opticalDistanceSensor.get("distance");
-
-        this.thrower = hardwareMap.servo.get("thrower");
-
-        this.pusherLeft = hardwareMap.servo.get("pusher_right");
-        this.pusherRight = hardwareMap.servo.get("pusher_left");
+        this.distance = hardwareMap.opticalDistanceSensor.get("distance");
 
         calibrateGyro();
     }

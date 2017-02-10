@@ -24,8 +24,4 @@ public class AutonUtil {
         bot.pusherRight.setPosition(0.0);
     }
 
-    public static void throwBalls(AdvancedBot bot) {
-        bot.thrower.setPosition(0.0);
-    }
-
 }

@@ -30,17 +30,12 @@ public class BaseControlOp extends LinearOpMode {
             bot.leftMotor.setPower(BotMath.powerCurve(gamepad1.right_stick_y) * invert);
             bot.rightMotor.setPower(BotMath.powerCurve(gamepad1.left_stick_y) * invert);
 
-            if (gamepad1.dpad_up) {
-                //bot.slide.setPower(0.5);
-            } else if (gamepad1.dpad_down) {
-                //bot.slide.setPower(-0.5);
-            } else {
-                //bot.slide.setPower(0.0);
-            }
-            //bot.slide.setPower(BotMath.powerCurve(gamepad2.left_stick_y));
+            bot.slide.setPower(BotMath.powerCurve(gamepad2.left_stick_y));
 
             if (gamepad1.y) {
-                bot.thrower.setPosition(1.0);
+                bot.launcher.setPower(AdvancedBot.DRIVE_SPEED);
+            } else {
+                bot.launcher.setPower(0.0);
             }
 
             if (gamepad1.x) {
@@ -62,8 +57,11 @@ public class BaseControlOp extends LinearOpMode {
                 bumperDown = false;
             }
 
-            telemetry.addData("Right Motor", bot.rightMotor.getPower());
             telemetry.addData("Left Motor", bot.leftMotor.getPower());
+            telemetry.addData("Right Motor", bot.rightMotor.getPower());
+            telemetry.addData("Slide Motor", bot.slide.getPower());
+            telemetry.addData("Left Pusher Position", bot.pusherLeft.getPosition());
+            telemetry.addData("Right Pusher Position", bot.pusherRight.getPosition());
             telemetry.addData("Beacon Red", bot.beaconSensor.red());
             telemetry.addData("Beacon Blue", bot.beaconSensor.blue());
             telemetry.addData("Beacon Green", bot.beaconSensor.green());
