@@ -24,6 +24,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
 
+    dexOptions {
+        incremental true
+    }
+
     signingConfigs {
         debug {
             keyAlias 'androiddebugkey'

@@ -9,14 +9,14 @@ import org.firstinspires.ftc.teamcode.hardware.HardwareBot;
  */
 public class AdvancedBot extends HardwareBot {
 
-    public static final double DRIVE_SPEED = 0.3;
+    public static final double DRIVE_SPEED = 0.75;
     public static final double TURN_SPEED = 0.05;
     public static final double FULL_SPEED = 1.0;
 
     public static final double UNITS_ROTATION = 1440;
 
     public static final int GYRO_THRESHOLD = 2;
-    public static final double LINE_THRESHOLD = 0.4;
+    public static final double LINE_THRESHOLD = 0.3;
 
     public static final double PUSHER_LEFT_INIT = 1.0;
     public static final double PUSHER_RIGHT_INIT = 0.0;
@@ -84,6 +84,10 @@ public class AdvancedBot extends HardwareBot {
         setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public void encoderTurn(double rotations) {
+        encoderDrive(rotations, -rotations);
+    }
+
     public void turnGyro(double rotation) {
         turnGyroTo(gyroHeading() + rotation);
     }
@@ -103,6 +107,19 @@ public class AdvancedBot extends HardwareBot {
             mode.updateTelemetry(mode.telemetry);
         }
         stopDrive();
+    }
+
+    public void lineFollow() {
+        double steering = (lineSensorLeft.getLightDetected() - lineSensorRight.getLightDetected()) * 0.10;
+        double power = 0.1;
+
+        if(steering >= 0) {
+            leftMotor.setPower(power - steering < 0 ? 0 : power - steering);
+            rightMotor.setPower(power + steering < 0 ? 0 : power + steering);
+        } else {
+            leftMotor.setPower(power + Math.abs(steering) < 0 ? 0 : power + Math.abs(steering));
+            rightMotor.setPower(power - Math.abs(steering) < 0 ? 0 : power - Math.abs(steering));
+        }
     }
 
     public void launchBalls() throws InterruptedException {

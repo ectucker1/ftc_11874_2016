@@ -65,11 +65,16 @@ public class BaseControlOp extends LinearOpMode {
             telemetry.addData("Beacon Red", bot.beaconSensor.red());
             telemetry.addData("Beacon Blue", bot.beaconSensor.blue());
             telemetry.addData("Beacon Green", bot.beaconSensor.green());
-            telemetry.addData("Line Light", bot.lineSensor.getRawLightDetected());
+            telemetry.addData("Line Light Left", bot.lineSensorLeft.getLightDetected());
+            telemetry.addData("Line Light Right", bot.lineSensorRight.getLightDetected());
+            telemetry.addData("Distance CM", bot.getDistanceCM());
             telemetry.addData("Gyro Heading", bot.gyroHeading());
+            telemetry.addData("Phone Orientation", bot.getAzimuth() + ":" + bot.getPitch() + ":" + bot.getRoll());
             telemetry.addData("Controls", invert == 1 ? "Normal" : "Inverted");
             telemetry.update();
         }
+
+        bot.destroy();
     }
 
 }

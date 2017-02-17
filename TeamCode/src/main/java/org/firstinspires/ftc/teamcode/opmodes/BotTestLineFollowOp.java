@@ -24,14 +24,23 @@ public class BotTestLineFollowOp extends LinearOpMode {
 
         waitForStart();
 
-        while(!gamepad1.a) {
-            if(bot.lineSensor.getLightDetected() < AdvancedBot.LINE_THRESHOLD) {
-                bot.leftMotor.setPower(0);
-                bot.rightMotor.setPower(AdvancedBot.TURN_SPEED);
+        while(!gamepad1.a && opModeIsActive()) {
+            /*if(bot.lineSensorLeft.getLightDetected() > AdvancedBot.LINE_THRESHOLD) {
+                bot.leftMotor.setPower(0.01);
+                bot.rightMotor.setPower(0.07);
+            } else if(bot.lineSensorRight.getLightDetected() > AdvancedBot.LINE_THRESHOLD) {
+                bot.leftMotor.setPower(0.07);
+                bot.rightMotor.setPower(0.01);
             } else {
-                bot.leftMotor.setPower(AdvancedBot.TURN_SPEED);
-                bot.rightMotor.setPower(0);
-            }
+                bot.leftMotor.setPower(0.04);
+                bot.rightMotor.setPower(0.04);
+            }*/
+
+            telemetry.addData("Left Motor", bot.leftMotor.getPower());
+            telemetry.addData("Right Motor", bot.rightMotor.getPower());
+            telemetry.addData("Left Light", bot.lineSensorLeft.getLightDetected());
+            telemetry.addData("Right Light", bot.lineSensorRight.getLightDetected());
+            telemetry.update();
         }
     }
 

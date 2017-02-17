@@ -136,6 +136,12 @@ public class FtcRobotControllerActivity extends Activity {
   protected FtcEventLoop eventLoop;
   protected Queue<UsbDevice> receivedUsbAttachmentNotifications;
 
+  private static Context appContext;
+
+  public static Context getContext() {
+    return FtcRobotControllerActivity.appContext;
+  }
+
   protected class RobotRestarter implements Restarter {
 
     public void requestRestart() {
@@ -205,6 +211,7 @@ public class FtcRobotControllerActivity extends Activity {
     setContentView(R.layout.activity_ftc_controller);
 
     context = this;
+    appContext = getApplicationContext();
     utility = new Utility(this);
     appUtil.setThisApp(new PeerAppRobotController(context));
 

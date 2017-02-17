@@ -5,10 +5,6 @@ package org.firstinspires.ftc.teamcode.math;
  */
 public class AutonUtil {
 
-    public static boolean onLine(AdvancedBot bot) {
-        return bot.lineSensor.getLightDetected() > 0.7;
-    }
-
     public static void driveToBeacon(boolean right) {
 
     }
