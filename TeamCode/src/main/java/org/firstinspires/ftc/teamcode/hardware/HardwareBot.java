@@ -9,7 +9,6 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
-import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerApp;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.math.BotMath;
 
@@ -34,19 +33,18 @@ public class HardwareBot implements SensorEventListener {
     public OpticalDistanceSensor lineSensorRight;
 
     private SensorManager androidSensorManager;
-    private Sensor magneticFieldSensor;
-    private Sensor accelerometer;
+    private Sensor phoneGyro;
+    private static final float EPSILON = 0.000000001f;
+    private static final float NS2S = 1.0f / 1000000000.0f;
+    public final float[] rotation = new float[4];
+    private float timestamp;
 
     public Servo pusherLeft;
     public Servo pusherRight;
 
+    public Servo intake;
+
     private double gyroOffset;
-
-    private final float[] mAccelerometerReading = new float[3];
-    private final float[] mMagnetometerReading = new float[3];
-
-    private final float[] mRotationMatrix = new float[9];
-    private final float[] mOrientationAngles = new float[3];
 
     public HardwareBot(LinearOpMode mode) {
         this.mode = mode;
@@ -59,9 +57,11 @@ public class HardwareBot implements SensorEventListener {
 
         this.slide = hardwareMap.dcMotor.get("slide");
         this.launcher = hardwareMap.dcMotor.get("launcher");
+        launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         this.pusherLeft = hardwareMap.servo.get("pusher_right");
         this.pusherRight = hardwareMap.servo.get("pusher_left");
+        this.intake = hardwareMap.servo.get("intake");
 
         this.gyro = hardwareMap.gyroSensor.get("gyro");
         this.beaconSensor = hardwareMap.colorSensor.get("color");
@@ -70,10 +70,8 @@ public class HardwareBot implements SensorEventListener {
         this.distance = new ModernRoboticsI2cRangeSensor(hardwareMap.i2cDeviceSynch.get("distance"));
 
         androidSensorManager = (SensorManager) FtcRobotControllerActivity.getContext().getSystemService(Context.SENSOR_SERVICE);
-        magneticFieldSensor = androidSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        accelerometer = androidSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        androidSensorManager.registerListener(this, magneticFieldSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        androidSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+        phoneGyro = androidSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        androidSensorManager.registerListener(this, phoneGyro, SensorManager.SENSOR_DELAY_FASTEST);
 
         calibrateGyro();
     }
@@ -103,46 +101,53 @@ public class HardwareBot implements SensorEventListener {
         androidSensorManager.unregisterListener(this);
     }
 
-    @Override
+    //Copied straight from https://developer.android.com/guide/topics/sensors/sensors_motion.html
+    //I have no idea what it does
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            System.arraycopy(event.values, 0, mAccelerometerReading,
-                    0, mAccelerometerReading.length);
-            updateOrientationAngles();
+        // This timestep's delta rotation to be multiplied by the current rotation
+        // after computing it from the gyro sample data.
+        if (timestamp != 0) {
+            final float dT = (event.timestamp - timestamp) * NS2S;
+            // Axis of the rotation sample, not normalized yet.
+            float axisX = event.values[0];
+            float axisY = event.values[1];
+            float axisZ = event.values[2];
+
+            // Calculate the angular speed of the sample
+            float omegaMagnitude = (float) Math.sqrt(axisX*axisX + axisY*axisY + axisZ*axisZ);
+
+            // Normalize the rotation vector if it's big enough to get the axis
+            // (that is, EPSILON should represent your maximum allowable margin of error)
+            if (omegaMagnitude > EPSILON) {
+                axisX /= omegaMagnitude;
+                axisY /= omegaMagnitude;
+                axisZ /= omegaMagnitude;
+            }
+
+            // Integrate around this axis with the angular speed by the timestep
+            // in order to get a delta rotation from this sample over the timestep
+            // We will convert this axis-angle representation of the delta rotation
+            // into a quaternion before turning it into the rotation matrix.
+            float thetaOverTwo = omegaMagnitude * dT / 2.0f;
+            float sinThetaOverTwo = (float)Math.sin(thetaOverTwo);
+            float cosThetaOverTwo = (float)Math.cos(thetaOverTwo);
+            rotation[0] = sinThetaOverTwo * axisX;
+            rotation[1] = sinThetaOverTwo * axisY;
+            rotation[2] = sinThetaOverTwo * axisZ;
+            rotation[3] = cosThetaOverTwo;
         }
-        else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            System.arraycopy(event.values, 0, mMagnetometerReading,
-                    0, mMagnetometerReading.length);
-            updateOrientationAngles();
-        }
+        timestamp = event.timestamp;
+        float[] deltaRotationMatrix = new float[9];
+        SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, rotation);
+        // User code should concatenate the delta rotation we computed with the current rotation
+        // in order to get the updated rotation.
+        // rotationCurrent = rotationCurrent * deltaRotationMatrix;
     }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
-
-    private void updateOrientationAngles() {
-        SensorManager.getRotationMatrix(mRotationMatrix, null,
-                mAccelerometerReading, mMagnetometerReading);
-
-        SensorManager.getOrientation(mRotationMatrix, mOrientationAngles);
-    }
-
-    public float[] getOrientation() {
-        return mOrientationAngles;
-    }
-
-    public float getAzimuth() {
-        return mOrientationAngles[0];
-    }
-
-    public float getPitch() {
-        return mOrientationAngles[1];
-    }
-
-    public float getRoll() {
-        return mOrientationAngles[2];
     }
 
 }

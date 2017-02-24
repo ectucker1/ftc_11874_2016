@@ -54,6 +54,10 @@ public class BaseControlOp extends LinearOpMode {
             bot.resetServos();
         }
 
+        if(gamepad2.a) {
+            bot.launchBalls();
+        }
+
         if (gamepad1.right_bumper) {
             if(!bumperDown) {
                 invert = invert * -1;
@@ -75,7 +79,7 @@ public class BaseControlOp extends LinearOpMode {
         telemetry.addData("Line Light Right", bot.lineSensorRight.getLightDetected());
         telemetry.addData("Distance CM", bot.getDistanceCM());
         telemetry.addData("Gyro Heading", bot.gyroHeading());
-        telemetry.addData("Phone Orientation", bot.getAzimuth() + ":" + bot.getPitch() + ":" + bot.getRoll());
+        telemetry.addData("Phone Orientation", bot.rotation[0] + ":" + bot.rotation[1] + ":" + bot.rotation[2]);
         telemetry.addData("Controls", invert == 1 ? "Normal" : "Inverted");
         telemetry.update();
     }

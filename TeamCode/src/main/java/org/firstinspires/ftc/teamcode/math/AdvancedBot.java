@@ -23,6 +23,9 @@ public class AdvancedBot extends HardwareBot {
     public static final double PUSHER_LEFT_FORWARD = 0.5;
     public static final double PUSHER_RIGHT_FORWARD = 0.5;
 
+    public static final double INTAKE_OPEN = 1.0;
+    public static final double INTAKE_CLOSED = 0.0;
+
     public AdvancedBot(LinearOpMode mode) {
         super(mode);
         resetServos();
@@ -50,6 +53,7 @@ public class AdvancedBot extends HardwareBot {
     public void resetServos() {
         pusherRight.setPosition(PUSHER_RIGHT_INIT);
         pusherLeft.setPosition(PUSHER_LEFT_INIT);
+        intake.setPosition(INTAKE_CLOSED);
     }
 
     public void encoderDrive(double rotations) {
@@ -124,7 +128,15 @@ public class AdvancedBot extends HardwareBot {
 
     public void launchBalls() throws InterruptedException {
         launcher.setPower(FULL_SPEED);
-        sleep(2000);
+        sleep(250);
+        intake.setPosition(INTAKE_OPEN);
+        sleep(125);
+        intake.setPosition(INTAKE_CLOSED);
+        sleep(500);
+        intake.setPosition(INTAKE_OPEN);
+        sleep(125);
+        intake.setPosition(INTAKE_CLOSED);
+        sleep(500);
         launcher.setPower(0.0);
     }
 
