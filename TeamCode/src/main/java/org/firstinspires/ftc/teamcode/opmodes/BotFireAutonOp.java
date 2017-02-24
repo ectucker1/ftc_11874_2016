@@ -23,7 +23,7 @@ public class BotFireAutonOp extends LinearOpMode {
 
         waitForStart();
 
-        bot.encoderDrive(0.1);
+        bot.launchBalls();
 
         bot.sleep(500);
     }
